@@ -1,0 +1,148 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+          ],
+          "Resource": "arn:aws:logs::${aws_caller_identity_account}:*"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [ "s3:ListBucket" ],
+          "Resource": "${config_bucket}"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [ "s3:GetObject", "s3:ListObjects" ],
+          "Resource": "${config_bucket}/*"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [ "kms:Decrypt" ],
+          "Resource": "${kms_s3_arn}"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [
+              "kms:Decrypt",
+              "kms:Encrypt",
+              "kms:GenerateDataKey",
+              "kms:GenerateDataKeyWithoutPlaintext"
+          ],
+          "Resource": [
+              "arn:aws:kms:*:*:key/*"
+          ]
+      },
+      {
+          "Effect": "Allow",
+          "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+          ],
+          "Resource": "arn:aws:s3:::littlepay-*-merchant-analytics"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+          ],
+          "Resource": "arn:aws:s3:::littlepay-*-merchant-analytics/*"
+      },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:ListBucket"
+    ],
+    "Resource": [
+      "arn:aws:s3:::littlepay-${aws_env_settlement}-cde-settlement-staging"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:GetObject", "s3:PutObject", "s3:PutObjectAcl"
+    ],
+    "Resource": [
+      "arn:aws:s3:::littlepay-${aws_env_settlement}-cde-settlement-staging/*"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:ListBucket"
+    ],
+    "Resource": [
+      "arn:aws:s3:::littlepay-${aws_env}-txn-report"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:GetObject", "s3:PutObject"
+    ],
+    "Resource": [
+      "arn:aws:s3:::littlepay-${aws_env}-txn-report/*"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "cloudwatch:PutMetricData",
+      "cloudwatch:GetMetricData"
+    ],
+    "Resource": "*"
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "dynamodb:UpdateItem",
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:DeleteItem"
+    ],
+    "Resource": "*"
+  },
+  {
+    "Effect": "Deny",
+    "Action": [
+      "dynamodb:*"
+    ],
+    "Resource": [
+      "${dynamodb_vault_sensitivedata}"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "sqs:*"
+    ],
+    "Resource": "*"
+  },
+  {
+    "Effect": "Deny",
+    "Action": [
+      "sqs:*"
+    ],
+    "Resource": [
+          "arn:aws:sqs:*:*:*card-security-*",
+          "arn:aws:sqs:*:*:__lp-svc-devicetransactions__*"
+        ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+     "xray:PutTraceSegments",
+     "xray:PutTelemetryRecords",
+     "xray:GetSamplingRules",
+     "xray:GetSamplingStatisticSummaries",
+     "xray:GetSamplingTargets"
+    ],
+    "Resource": "*"
+  }
+]
+}
